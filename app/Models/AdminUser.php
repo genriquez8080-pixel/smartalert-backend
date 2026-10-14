@@ -27,26 +27,17 @@ class AdminUser extends Authenticatable
         'remember_token',
     ];
 
-    /**
-     * Laravel espera el password en "password".
-     * Nosotros lo tenemos en "contrasena".
-     */
+
     public function getAuthPassword()
     {
         return $this->contrasena;
     }
 
-    /**
-     * Opcional: confirmamos que el "username" de login sea el correo.
-     */
     public function getAuthIdentifierName()
     {
         return 'correo';
     }
 
-    /**
-     * Helper para validar que sea admin.
-     */
     public function isAdmin(): bool
     {
         return $this->rol === 'admin';

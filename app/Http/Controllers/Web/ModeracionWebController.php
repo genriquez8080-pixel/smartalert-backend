@@ -10,7 +10,6 @@ use App\Models\Moderacion;
 
 class ModeracionWebController extends Controller
 {
-    // Lista de reportes pendientes
     public function index()
     {
         $pendientes = Reporte::with(['usuario','area','tipo'])
@@ -21,7 +20,6 @@ class ModeracionWebController extends Controller
         return view('admin.moderacion.index', compact('pendientes'));
     }
 
-    // Ver detalle
     public function show($id)
     {
         $reporte = Reporte::with(['usuario','area','tipo'])
@@ -30,7 +28,6 @@ class ModeracionWebController extends Controller
         return view('admin.moderacion.show', compact('reporte'));
     }
 
-    // Aprobar / Rechazar
     public function action(Request $request, $id)
     {
         $request->validate([
@@ -42,7 +39,6 @@ class ModeracionWebController extends Controller
 
         $admin = Auth::guard('admin')->user();
 
-        // Guardar en moderación
         Moderacion::create([
             'id_reporte' => $reporte->id_reporte,
             'id_admin'   => $admin->id_usuario,
@@ -50,7 +46,6 @@ class ModeracionWebController extends Controller
             'motivo'     => $request->motivo
         ]);
 
-        // Cambiar estado del reporte
         $reporte->estado = $request->accion;
         $reporte->save();
 
@@ -59,7 +54,6 @@ class ModeracionWebController extends Controller
     }
 
 
-    // ✅ Historial de moderaciones
     public function historial()
     {
         $historial = Moderacion::with([
@@ -67,10 +61,9 @@ class ModeracionWebController extends Controller
                 'reporte.tipo',
                 'admin'
             ])
-            ->orderByDesc('fecha_modificacion') // tu columna real
+            ->orderByDesc('fecha_modificacion') 
             ->get();
 
-        // 👇 MISMO "admin.moderacion" que ya usas en index/show
         return view('admin.moderacion.historial', compact('historial'));
     }
 }

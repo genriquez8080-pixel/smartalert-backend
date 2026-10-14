@@ -8,13 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminAuthController extends Controller
 {
-    // Mostrar formulario de login
     public function showLogin()
     {
         return view('admin.login');
     }
 
-    // Procesar login
     public function login(Request $request)
     {
         $request->validate([
@@ -24,7 +22,7 @@ class AdminAuthController extends Controller
 
         $credentials = [
             'correo' => $request->correo,
-            'password' => $request->contrasena, // Laravel lo mapea a getAuthPassword()
+            'password' => $request->contrasena, 
         ];
 
         if (Auth::guard('admin')->attempt($credentials)) {
@@ -47,7 +45,6 @@ class AdminAuthController extends Controller
         ]);
     }
 
-    // Cerrar sesión
     public function logout(Request $request)
     {
         Auth::guard('admin')->logout();
